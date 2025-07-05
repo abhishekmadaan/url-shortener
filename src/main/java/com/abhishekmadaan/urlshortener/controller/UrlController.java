@@ -1,6 +1,6 @@
 package com.abhishekmadaan.urlshortener.controller;
 
-import com.abhishekmadaan.urlshortener.service.UrlKeyGeneratorService;
+import com.abhishekmadaan.urlshortener.service.UrlShortenerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -8,17 +8,19 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api")
 public class UrlController {
     @Autowired
-    UrlKeyGeneratorService urlKeyGeneratorService;
+    private final UrlShortenerService urlShortenerService;
+
+    public UrlController(UrlShortenerService urlShortenerService) {
+        this.urlShortenerService = urlShortenerService;
+    }
 
     @PostMapping("/shorten")
     public String shortenURL(@RequestBody String longUrl) {
-        //call service
-        return "shortUrl";
+        return urlShortenerService.shortenUrl(longUrl);
     }
 
     @GetMapping("/{shortUrl}")
     public String getLongUrl(@PathVariable String shortUrl) {
-        //call service
-        return "longUrl";
+        return urlShortenerService.getLongUrl(shortUrl);
     }
 }
