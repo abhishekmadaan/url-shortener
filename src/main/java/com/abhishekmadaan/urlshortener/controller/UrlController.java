@@ -7,7 +7,6 @@ import com.abhishekmadaan.urlshortener.service.UrlShortenerService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api")
