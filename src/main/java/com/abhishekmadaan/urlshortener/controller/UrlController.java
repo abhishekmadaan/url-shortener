@@ -1,10 +1,13 @@
 package com.abhishekmadaan.urlshortener.controller;
 
+import com.abhishekmadaan.urlshortener.dto.OriginalUrlResponse;
 import com.abhishekmadaan.urlshortener.dto.ShortenUrlRequest;
 import com.abhishekmadaan.urlshortener.dto.ShortenUrlResponse;
 import com.abhishekmadaan.urlshortener.service.UrlShortenerService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api")
@@ -27,13 +30,19 @@ public class UrlController {
     }
 
     @GetMapping("/{shortUrl}")
-    public ResponseEntity<String> getLongUrl(@PathVariable String shortUrl) {
+    public ResponseEntity<OriginalUrlResponse> getLongUrl(@PathVariable String shortUrl) {
         String originalUrl = urlShortenerService.getLongUrl(shortUrl);
 
         if (originalUrl == null) {
             return ResponseEntity.notFound().build();
         }
 
-        return ResponseEntity.ok(originalUrl);
+        return ResponseEntity.ok(new OriginalUrlResponse(originalUrl));
+    }
+
+    @DeleteMapping("/{shortUrl}")
+    public ResponseEntity<Void> deleteUrl(@PathVariable String shortUrl) {
+        boolean deleted = urlShortenerService.deleteShortUrl(shortUrl);
+        return deleted ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
     }
 }
